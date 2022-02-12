@@ -26,7 +26,7 @@ namespace synchronisation
             toolList.Add(screwdriver2);
             toolList.Add(spanner2);
 
-            Del Work = delegate(Tool screwdriver, Tool spanner, Worker worker) 
+            Del Work = delegate (Tool screwdriver, Tool spanner, Worker worker)
              {
                  if (Monitor.TryEnter(screwdriver, 15000) && Monitor.TryEnter(spanner, 15000))
                  {
@@ -44,10 +44,10 @@ namespace synchronisation
                  }
              };
 
-            Thread w1 = new Thread(() => Work(toolList[0],toolList[1],workerw1));
-            Thread w2 = new Thread(() => Work(toolList[2], toolList[3], workerw2));
-            Thread w3 = new Thread(() => Work(toolList[0], toolList[1], workerw3));
-            Thread w4 = new Thread(() => Work(toolList[2], toolList[3], workerw4));
+            Thread w1 = new Thread(() => Work(toolList[0], toolList[1], workerw1));
+            Thread w2 = new Thread(() => Work(toolList[1], toolList[2], workerw2));
+            Thread w3 = new Thread(() => Work(toolList[2], toolList[3], workerw3));
+            Thread w4 = new Thread(() => Work(toolList[3], toolList[0], workerw4));
 
             w1.Start();
             w2.Start();
@@ -56,7 +56,7 @@ namespace synchronisation
 
             while (true)
             {
-                
+
             }
         }
     }
