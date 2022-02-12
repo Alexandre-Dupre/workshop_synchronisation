@@ -6,7 +6,7 @@ namespace synchronisation
 {
     class Program
     {
-        delegate void Del(Tool, Tool);
+        delegate void Del(Tool obj1, Tool obj2, Worker worker);
 
         static void Main(string[] args)
         {
@@ -26,23 +26,37 @@ namespace synchronisation
             toolList.Add(screwdriver2);
             toolList.Add(spanner2);
 
-            ThreadStart threadDelegatew1 = new ThreadStart(workerw1.CanWork);
-            ThreadStart threadDelegatew2 = new ThreadStart(workerw2.DoWork);
-            ThreadStart threadDelegatew3 = new ThreadStart(workerw3.DoWork);
-            ThreadStart threadDelegatew4 = new ThreadStart(workerw4.DoWork);
+            Del Work = delegate(Tool screwdriver, Tool spanner, Worker worker) 
+             {
+                 if (Monitor.TryEnter(screwdriver, 15000) && Monitor.TryEnter(spanner, 15000))
+                 {
+                     try
+                     {
+                         worker.DoWork();
+                     }
 
-            Del d1 = workerw1.CanWork;
+                     finally
+                     {
+                         Monitor.Exit(screwdriver);
+                         Monitor.Exit(spanner);
+                     }
+                 }
+             };
 
+            Thread w1 = new Thread(() => Work(toolList[0],toolList[1],workerw1));
+            Thread w2 = new Thread(() => Work(toolList[2], toolList[3], workerw2));
+            Thread w3 = new Thread(() => Work(toolList[0], toolList[1], workerw3));
+            Thread w4 = new Thread(() => Work(toolList[2], toolList[3], workerw4));
 
-            Thread w1 = new Thread(d1(toolList[0], toolList[1]));
-            Thread w2 = new Thread(threadDelegatew2);
-            Thread w3 = new Thread(threadDelegatew3);
-            Thread w4 = new Thread(threadDelegatew4);
+            while (true)
+            {
+                w1.Start();
+                w2.Start();
+                w3.Start();
+                w4.Start();
+            }
             
-            w1.Start(toolList[0],toolList[1]);
-            w2.Start();
-            w3.Start();
-            w4.Start();
+            
         }
     }
 }

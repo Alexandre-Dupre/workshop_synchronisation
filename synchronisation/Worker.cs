@@ -8,19 +8,20 @@ namespace synchronisation
     class Worker
     {
         private string _name;
-        private bool _hasScrewdriver;
         private int _count;
-        bool lockTaken = false;
+
+        public string Name { get => _name; set => _name = value; }
+
         public Worker(string name)
         {
             _name = name;
-            _hasScrewdriver = false;
             _count = 0;
         }
 
         public void DoWork()
         {
-            Console.WriteLine(_name + "is working... ");
+            _count += 1;
+            Console.WriteLine(_name + " is working... ");
             Thread.Sleep(4000);
         }
 
