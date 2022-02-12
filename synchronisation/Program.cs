@@ -33,6 +33,7 @@ namespace synchronisation
                      try
                      {
                          worker.DoWork();
+                         worker.NbrOfPiecesCreated();
                      }
 
                      finally
@@ -48,15 +49,15 @@ namespace synchronisation
             Thread w3 = new Thread(() => Work(toolList[0], toolList[1], workerw3));
             Thread w4 = new Thread(() => Work(toolList[2], toolList[3], workerw4));
 
+            w1.Start();
+            w2.Start();
+            w3.Start();
+            w4.Start();
+
             while (true)
             {
-                w1.Start();
-                w2.Start();
-                w3.Start();
-                w4.Start();
+                
             }
-            
-            
         }
     }
 }

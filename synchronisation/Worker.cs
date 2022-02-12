@@ -25,21 +25,9 @@ namespace synchronisation
             Thread.Sleep(4000);
         }
 
-        public void CanWork(Tool screwdriver,Tool spanner)
+        public void NbrOfPiecesCreated()
         {
-            if (Monitor.TryEnter(screwdriver, 15000) && Monitor.TryEnter(spanner, 15000))
-            {
-                try
-                {
-                    this.DoWork();
-                }
-
-                finally
-                {
-                    Monitor.Exit(screwdriver);
-                    Monitor.Exit(spanner);
-                }
-            }
+            Console.WriteLine(_name + " created : " + _count + " pieces from the beginning.");
         }
     }
 }
